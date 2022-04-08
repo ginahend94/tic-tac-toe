@@ -6,6 +6,7 @@
     --dark-blue-rgb:34, 52, 59;
     --light-blue-rgb:135, 206, 235;
     --lighter-blue-rgb:195, 230, 245;
+    --current-player:'⨉';
 }
 
 html {
@@ -75,6 +76,11 @@ main {
     align-items: center;
     background-color: white;
     transition: .1s;
+}
+
+.slot[data-marker = 'undefined']:hover::before {
+    content: var(--current-player);
+    opacity: .5;
 }
 
 .slot[data-marker = 'x']::before {

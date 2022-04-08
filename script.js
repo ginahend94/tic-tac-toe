@@ -57,7 +57,11 @@ const Gameboard = (() => {
         if (board.every(a => a)) return 'draw';
     }
 
-    const switchTurn = () => xPlaying = !xPlaying;
+    const switchTurn = () => {
+        xPlaying = !xPlaying;
+        // Change hover marker to current player's marker
+        document.documentElement.style.setProperty('--current-player', xPlaying?'\'⨉\'':'\'◯\'');
+    }
 
     const showBoard = () => {
         const main = document.querySelector('.gameboard');
@@ -75,6 +79,7 @@ const Gameboard = (() => {
                     {once:true})
                 );
                 slot.style.cursor = 'pointer';
+                
             }
         }
     }
