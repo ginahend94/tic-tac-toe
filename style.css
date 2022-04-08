@@ -78,9 +78,9 @@ main {
     transition: .1s;
 }
 
-.slot[data-marker = 'undefined']:hover::before {
+.slot[data-marker = 'null']:hover::before {
     content: var(--current-player);
-    opacity: .5;
+    opacity: .3;
 }
 
 .slot[data-marker = 'x']::before {

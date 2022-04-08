@@ -7,7 +7,8 @@ const Gameboard = (() => {
     //     'x','o','o',
     // ];
 
-    let board = new Array(9);
+    //let board = new Array(9);
+    let board = Array(9).fill(null);
 
     let xPlaying = true;
 
@@ -42,25 +43,16 @@ const Gameboard = (() => {
         // for each index, if all have same marker, return true
         let isWin = winners.some(winner => {
             if (!board[winner[0]] || !board[winner[1]] || !board[winner[2]]) return false;
-            console.log(board[winner[0]]);
-            console.log(board[winner[1]]);
-            console.log(board[winner[1]]);
-            console.log(board[winner[0]] == board[winner[1]]);
-            console.log(board[winner[1]] == board[winner[2]]);
             return board[winner[0]] == board[winner[1]] && board[winner[1]] == board[winner[2]]
         })
         if (isWin) return isWin;
-        console.log(board.every(a => {
-            console.log(!!a);
-            console.log(board.indexOf(a));
-        }))
         if (board.every(a => a)) return 'draw';
     }
 
     const switchTurn = () => {
         xPlaying = !xPlaying;
         // Change hover marker to current player's marker
-        document.documentElement.style.setProperty('--current-player', xPlaying?'\'⨉\'':'\'◯\'');
+        document.documentElement.style.setProperty('--current-player', xPlaying?`'⨉'`:`'◯'`);
     }
 
     const showBoard = () => {
@@ -75,33 +67,17 @@ const Gameboard = (() => {
             if (!board[i]) {
                 slot.addEventListener(
                     'click', 
-                    playTurn.bind(slot, i, xPlaying ? 'x' : 'o', 
-                    {once:true})
+                    playTurn.bind(slot, i, xPlaying ? 'x' : 'o')
                 );
                 slot.style.cursor = 'pointer';
-                
             }
         }
     }
 
-    return {showBoard};
+    return {showBoard, playTurn};
 })();
 
 Gameboard.showBoard();
-
-// Game flow
-const GameFlow = (() => {
-})();
-
-const Player = (marker) => {
-    this.marker = marker;
-    return {marker, who};
-}
-// Player 1
-
-// Player 2
-// Display
-
 
 // User selects X or O
 // Computer is set to opposite of what player chooses
@@ -112,5 +88,5 @@ const Player = (marker) => {
 // each move is logged in gameboard
 // game searches gameboard for win
 // if win condition is met, game ends
-// Winner is displayed ib screen
+// Winner is displayed on screen
 // Option to play again is displayed on screen
