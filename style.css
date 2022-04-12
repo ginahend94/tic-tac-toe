@@ -4,6 +4,7 @@
 
 :root {
     --dark-blue-rgb:34, 52, 59;
+    -blue:rgb(135,206,235);
     --light-blue-rgb:135, 206, 235;
     --lighter-blue-rgb:195, 230, 245;
     --current-player:'⨉';
@@ -70,13 +71,16 @@ input {
 }
 
 label[for='playerIsO'] {
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
+    display: none;
     cursor: pointer;
     position: relative;
     width: 100%;
 }
+
+#playWithComputer:checked + label[for='playerIsO'] {
+    display: block !important;
+}
+
 label[for='playerIsO'] .xo,
 label[for='playerIsO'] .xOrO {
     position: absolute;
@@ -180,6 +184,11 @@ main {
     transition: .1s;
 }
 
+.slot[data-marker = 'null']::before {
+    content: var(--current-player);
+    opacity: 0;
+    transition: .15s;
+}
 .slot[data-marker = 'null']:hover::before {
     content: var(--current-player);
     opacity: .3;

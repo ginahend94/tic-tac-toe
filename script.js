@@ -79,6 +79,55 @@ const Gameboard = (() => {
 
 Gameboard.showBoard();
 
+const Player = name => {
+    let marker;
+    const setMarker = selection => {
+        marker = selection;
+    }
+    const getMarker = () => marker;
+    return {name, setMarker, getMarker};
+}
+
+const playerOne = Player('player one');
+const playerTwo = Player('player two');
+const computer = Player('computer');
+
+
+playerOne.setMarker('x');
+computer.setMarker('o');
+
+// const Player = (() => {
+//     const playWithComputerCheckbox = document.getElementById('playWithComputer');
+//     const playerOptions = document.querySelector(`label[for='playerIsO']`);
+//     playWithComputerCheckbox.addEventListener('change', e => {
+//         playerOptions.style.display = e.target.checked ? 'block' : 'none';
+//     })
+//     let marker = 'x';
+
+//     const setMarker = e => {
+//         console.log(e.target.checked);
+//         marker = e.target.checked ? 'o' : 'x';
+//         console.log(marker);
+//     };
+
+//     return {marker, setMarker}
+// })();
+
+const playerIsOCheckbox = document.getElementById('playerIsO');
+playerIsOCheckbox.addEventListener('change', Player.setMarker);
+
+// User can select to play against computer
+const Computer = (() => {
+    let marker = Player.marker == 'x' ? 'o' : 'x';
+
+    const setMarker = e => {
+        console.log(e.target.checked);
+        marker = e.target.checked ? 'o' : 'x';
+        console.log(marker);
+    };
+
+    return {marker, setMarker};
+})();
 // User selects X or O
 // Computer is set to opposite of what player chooses
 // gameboard is displayed on screen
