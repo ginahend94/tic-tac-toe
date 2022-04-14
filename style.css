@@ -7,7 +7,7 @@
     -blue:rgb(135,206,235);
     --light-blue-rgb:135, 206, 235;
     --lighter-blue-rgb:195, 230, 245;
-    --current-player:'⨉';
+    --current-player:'✖';
 }
 
 html {
@@ -25,6 +25,9 @@ html {
 header {
     padding: 40px;
     background-color: rgb(var(--light-blue-rgb));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 menu {
     padding: 0;
@@ -33,106 +36,20 @@ menu {
     gap:10px;
     text-align: center;
 }
-label[for='playWithComputer'] {
-    display: grid;
-    grid-template-columns: repeat(3, max-content);
-    gap:10px;
-    padding: 5px;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
 
-input[type="checkbox"] {
-    width: 0px;
-    height: 0px;
-    opacity: 0;
-}
-.checkbox {
-    width: 15px;
-    height: 15px;
-    position: relative;
-    border:solid 1px rgba(var(--dark-blue-rgb),.5);
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.checkbox::after {
-    content: '✓';
-    font-size: 1.5em;
-    cursor: pointer;
-    opacity: 0;
-    transition: .1s;
-}
-#playWithComputer:checked + .checkbox::after{
-    content:'✓';
-    opacity: 1;
-}
-
-label[for='playerIsO'] {
-    /* display: none; */
-    cursor: pointer;
-    position: relative;
-    width: 100%;
-}
-
-#playWithComputer:checked + label[for='playerIsO'] {
-    display: block !important;
-}
-
-label[for='playerIsO'] .xo,
-label[for='playerIsO'] .xOrO {
-    position: absolute;
-    margin: auto;
-    left: 0;
-    right: 0;
-    width: max-content;
-    letter-spacing: 10px;
-    margin-top: 30px;
-}
-
-.marker {
-    font-weight: bold;
-}
-
-.xOrO {
-    top:-3px;
-}
-
-.xOrO::after {
-    content: '';
-    width: 2.5ch;
-    height: 2.5ch;
+.scoreboard {
     border: solid 1px;
-    border-radius: 5px;
-    position: absolute;
-    top:0;
-    transition: .2s;
-    left: -28px;
+    width: max-content;
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }
 
-#playerIsO:checked + .xOrO::after {
-    content: '';
-    left: -7px;
+#reset-scores {
+    grid-column: span 2;
 }
 
-#playerIsO:checked ~ .xo .o {
-    opacity: 1;
-}
-#playerIsO:checked ~ .xo .x {
-    opacity: .5;
-}
-.x {
-    opacity: 1;
-    transition: .2s;
-}
-.o {
-    opacity: .5;
-    transition: .2s;
-}
-
-.new-game {
+button {
     border:solid 1px rgba(var(--dark-blue-rgb),.5);
     border-radius: 5px;
     padding: 10px;
@@ -141,12 +58,12 @@ label[for='playerIsO'] .xOrO {
     transition: .1s;
 }
 
-.new-game:hover {
-    transform: scale(1.1);
+button:hover {
+    opacity: .7;
 }
 
-.new-game:active {
-    transform: scale(1);
+button:active {
+    opacity: 1;
 }
 
 main {
@@ -195,9 +112,10 @@ main {
 }
 
 .slot[data-marker = 'x']::before {
-    content: '⨉';
+    content: '✖';
 }
 
 .slot[data-marker = 'o']::before {
-    content: '◯';
+    content: '⭘';
+    font-size: 1.5em;
 }

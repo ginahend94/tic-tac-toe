@@ -177,9 +177,10 @@ const Gameboard = (() => {
     }
 
     const switchTurn = () => {
-        xPlaying = !xPlaying;
+        setXPlaying(!getXPlaying());
+        // xPlaying = !xPlaying;
         // Change hover marker to current player's marker
-        setHoverMarker(`${xPlaying ? '⨉' : '◯'}`);
+        setHoverMarker(`${xPlaying ? '✖' : '⭘'}`);
     }
 
     const showBoard = () => {
@@ -207,7 +208,7 @@ const Gameboard = (() => {
         setXPlaying();
         score.resetScores();
         setTurnLabel(`x's turn`);
-        setHoverMarker('⨉');
+        setHoverMarker('✖');
         showBoard();
     }
 
@@ -246,8 +247,6 @@ const Computer = (() => {
 // new game button clears board array, unlocks marker buttons
 
 //TO DO
-// Enable playing against computer
-// program new game button
 // Style page better
 // Maybe fix page layout?
 // Add rules (inc. x goes first)

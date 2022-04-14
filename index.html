@@ -21,7 +21,7 @@
                 <label for="playWithComputer">
                     <input type="checkbox" id="playWithComputer">
                     <span class="checkbox"></span>
-                    <span>Play against Computer</span>
+                    <span>Play against Computer ✓</span>
                 </label>
                 <div class="user-selection">
                     <label for="x-button">
@@ -31,18 +31,19 @@
                         <input type="radio" name="user-marker" id="o-button" value="o"> O
                     </label>
                 </div>
-                <label for="playerIsO">
-                    <span class="marker">Marker</span>
-                    <input type="checkbox" id="playerIsO">
-                    <span class="xOrO"></span>
-                    <span class="xo"><span class="x">X</span><span class="o">O</span></span>
-                </label>
                 <label for="hardMode" title="This is actually impossible to win.">
                     <input type="checkbox" id="hardMode">
                     <span class="checkbox"></span>
                     <span>Hard mode</span>
                 </label>
             </menu>
+            <div class="scoreboard">
+                <div>✖</div>
+                <div>⭘</div>
+                <div id="x-score">0</div>
+                <div id="o-score">0</div>
+                <button id="reset-scores">Reset scores</button>
+            </div>
         </header>
         <main>
             <h2 id="turnLabel">X's Turn</h2>
