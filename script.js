@@ -163,9 +163,8 @@ const Gameboard = (() => {
 
     const switchTurn = () => {
         setXPlaying(!getXPlaying());
-        // xPlaying = !xPlaying;
         // Change hover marker to current player's marker
-        setHoverMarker(`${xPlaying ? '✖' : '⭘'}`);
+        setHoverMarker(`${getXPlaying() ? '✖' : '⭘'}`);
     }
 
     const showBoard = () => {
@@ -201,9 +200,6 @@ const Gameboard = (() => {
 
 Gameboard.showBoard();
 
-
-
-
 // Players can either play against person or computer
 // X goes first
 
@@ -235,7 +231,4 @@ const Computer = (() => {
 // Add rules (inc. x goes first)
 // Add animations
 // Line through winning play OR winning match lights up
-// markers
-// winner
-// create x wins and o wins variables in game board
-// X and O different colors (b&w)
+// Clear timeout for when you reset game before computer plays
