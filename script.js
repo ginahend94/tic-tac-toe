@@ -73,12 +73,6 @@ const Options = (() => {
 
 // Gameboard
 const Gameboard = (() => {
-    // let board = [
-    //     'x','x','o',
-    //     'o','x','x',
-    //     'x','o','o',
-    // ]; 
-    // Testing board
 
     let board = Array(9).fill(null);
     const getBoard = () => board;
@@ -200,10 +194,6 @@ const Gameboard = (() => {
 
 Gameboard.showBoard();
 
-// Players can either play against person or computer
-// X goes first
-
-// COMPUTER -------
 const Computer = (() => {
 
     // COMPUTER LOGIC
@@ -222,8 +212,6 @@ const Computer = (() => {
     return { computerSlot };
 
 })();
-
-// new game button clears board array, unlocks marker buttons
 
 //TO DO
 // Style page better
