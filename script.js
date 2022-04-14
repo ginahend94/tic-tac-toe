@@ -2,31 +2,37 @@
 
 // OPTIONS
 const Options = (() => {
-    const playWithComputerCheckbox = document.getElementById('playWithComputer');
-    let playWithComputer = !!playWithComputerCheckbox.checked;
-    playWithComputerCheckbox.addEventListener('change', setPlayWithComputer)
-
-    function setPlayWithComputer(e) {
-        playWithComputer = e.target.checked;
-    }
-
-    const getPlayWithComputer = () => playWithComputer;
-
+    
     // X is chosen by default
     let userMarker = 'x';
     let computerMarker = 'o';
-    getUserMarker = () => userMarker;
-    getComputerMarker = () => computerMarker;
+    const getUserMarker = () => userMarker;
+    const getComputerMarker = () => computerMarker;
+    const resetMarkers = () => {
+        userMarker = 'x';
+        computerMarker = 'o';
+        document.getElementById('x-button').checked = true;
+        document.getElementById('o-button').checked = false;
+    }
     const userMarkerRadios = Array.from(document.querySelectorAll('input[name="user-marker"]'));
+    
+    const playWithComputerCheckbox = document.getElementById('playWithComputer');
+    let playWithComputer = !!playWithComputerCheckbox.checked;
+    const setPlayWithComputer = e => {
+        playWithComputer = e.target.checked;
+        userMarkerRadios.forEach(a => a.disabled = !playWithComputer);
+    }
+    setPlayWithComputer({target:playWithComputerCheckbox});
+    playWithComputerCheckbox.addEventListener('change', setPlayWithComputer)
+    const getPlayWithComputer = () => playWithComputer;
 
     // User selects X or O
     // when changed, assign checked to marker, then assign opposite to computer marker
-    const setMarker = () => {
+    const setUserMarker = () => {
         userMarker = userMarkerRadios.find(a => a.checked).value;
         // Computer is set to opposite marker
         computerMarker = userMarker == 'o' ? 'x' : 'o';
         if (userMarker == 'o' && getPlayWithComputer()) {
-            //Gameboard.switchTurn(); // Test?
             lockIn();
             setTimeout(() => {
                 Gameboard.playTurn(Computer.computerSlot(), getComputerMarker());
@@ -35,7 +41,7 @@ const Options = (() => {
     }
 
     // Add event listener to both radio btns
-    userMarkerRadios.forEach(a => a.addEventListener('change', setMarker));
+    userMarkerRadios.forEach(a => a.addEventListener('change', setUserMarker));
 
     // If user chose O, options are locked in until game restart
     const lockIn = () => {
@@ -45,11 +51,22 @@ const Options = (() => {
     }
 
     const isComputerTurn = () => {
+        if (!getPlayWithComputer()) return false;
         if (Gameboard.getXPlaying()) {
             return computerMarker == 'x';
         }
         return computerMarker == 'o';
     }
+
+    const newGameButton = document.querySelector('.new-game');
+    const resetGame = () => {
+        document.querySelectorAll('input').forEach(a => a.disabled = false);
+        resetMarkers();
+        Gameboard.reset();
+        console.log('game reset');
+    }
+    newGameButton.addEventListener('click', resetGame);
+
 
     return { getUserMarker, getComputerMarker, isComputerTurn, getPlayWithComputer };
 })();
@@ -65,30 +82,41 @@ const Gameboard = (() => {
 
     let board = Array(9).fill(null);
     const getBoard = () => board;
+    const clearBoard = () => board = Array(9).fill(null);
+
 
     let xPlaying = true;
     const getXPlaying = () => xPlaying;
+    const setXPlaying = (boolean = true) => xPlaying = boolean;
 
     const score = (() => {
         x = 0;
         o = 0;
+        resetScores = () => {
+            this.x = 0;
+            this.o = 0;
+        }
         xWin = () => this.x += 1;
         oWin = () => this.o += 1;
         getX = () => this.x;
         getO = () => this.o;
-        return { xWin, oWin, getX, getO };
+        return { xWin, oWin, getX, getO, resetScores };
     })();
     const getScore = () => `x:${score.getX()} o:${score.getO()}`; // Test
 
     const markSlot = (slot, marker) => board[slot] = marker;
 
     const turnLabel = document.getElementById('turnLabel');
+    const setTurnLabel = text => turnLabel.textContent = text;
+
     const checkForWin = marker => {
         if (winState()) {
             if (winState() != 'draw') {
-                turnLabel.textContent = `${marker} wins!`;
+                //turnLabel.textContent = `${marker} wins!`;
+                setTurnLabel(`${marker} wins!`);
             } else {
-                turnLabel.textContent = `It's a draw!`;
+                // turnLabel.textContent = `It's a draw!`;
+                setTurnLabel(`It's a draw!`);
             }
         }
         return winState();
@@ -97,7 +125,8 @@ const Gameboard = (() => {
     const playTurn = (slot, marker) => {
         markSlot(slot, marker);
         switchTurn();
-        if (!checkForWin(marker)) turnLabel.textContent = `${marker == 'x' ? 'o' : 'x'}'s turn`
+        // if (!checkForWin(marker)) turnLabel.textContent = `${marker == 'x' ? 'o' : 'x'}'s turn`
+        if (!checkForWin(marker)) setTurnLabel(`${marker == 'x' ? 'o' : 'x'}'s turn`);
         showBoard();
         return;
     }
@@ -119,6 +148,10 @@ const Gameboard = (() => {
                 playTurn(Computer.computerSlot(), Options.getComputerMarker());
             }, 1000);
         }
+    }
+
+    const setHoverMarker = marker => {
+        document.documentElement.style.setProperty('--current-player', `'${marker}'`);
     }
 
     const winState = () => {
@@ -147,7 +180,8 @@ const Gameboard = (() => {
     const switchTurn = () => {
         xPlaying = !xPlaying;
         // Change hover marker to current player's marker
-        document.documentElement.style.setProperty('--current-player', xPlaying ? `'⨉'` : `'◯'`);
+        setHoverMarker(`${xPlaying ? '⨉' : '◯'}`);
+        console.log('changing hover maker')
     }
 
     const showBoard = () => {
@@ -170,7 +204,16 @@ const Gameboard = (() => {
         }
     }
 
-    return { getBoard, showBoard, playRound, playTurn, getScore, getXPlaying, markSlot, switchTurn };
+    const reset = () => {
+        clearBoard();
+        setXPlaying();
+        score.resetScores();
+        setTurnLabel(`x's turn`);
+        setHoverMarker('⨉');
+        showBoard();
+    }
+
+    return { getBoard, showBoard, playRound, playTurn, getScore, getXPlaying, markSlot, switchTurn, reset };
 })();
 
 Gameboard.showBoard();
