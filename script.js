@@ -112,12 +112,11 @@ const Gameboard = (() => {
     const checkForWin = marker => {
         if (winState()) {
             if (winState() != 'draw') {
-                //turnLabel.textContent = `${marker} wins!`;
                 setTurnLabel(`${marker} wins!`);
             } else {
-                // turnLabel.textContent = `It's a draw!`;
                 setTurnLabel(`It's a draw!`);
             }
+            setHoverMarker('');
         }
         return winState();
     }
@@ -125,7 +124,6 @@ const Gameboard = (() => {
     const playTurn = (slot, marker) => {
         markSlot(slot, marker);
         switchTurn();
-        // if (!checkForWin(marker)) turnLabel.textContent = `${marker == 'x' ? 'o' : 'x'}'s turn`
         if (!checkForWin(marker)) setTurnLabel(`${marker == 'x' ? 'o' : 'x'}'s turn`);
         showBoard();
         return;
@@ -142,6 +140,7 @@ const Gameboard = (() => {
 
         // Check if playing with computer and if it's computer's turn
         if (Options.getPlayWithComputer() && Options.isComputerTurn()) {
+            setHoverMarker('');
             // Make sure computer doesn't play after a win
             if (checkForWin(Marker.marker)) return;
             setTimeout(() => {
@@ -181,7 +180,6 @@ const Gameboard = (() => {
         xPlaying = !xPlaying;
         // Change hover marker to current player's marker
         setHoverMarker(`${xPlaying ? '⨉' : '◯'}`);
-        console.log('changing hover maker')
     }
 
     const showBoard = () => {
