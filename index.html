@@ -23,19 +23,21 @@
                     <span class="checkbox"></span>
                     <span>Play against Computer ✓</span>
                 </label>
-                <div class="user-selection">
-                    <label for="x-button">
-                        <input type="radio" name="user-marker" id="x-button" value="x" checked> X
-                    </label>
-                    <label for="o-button">
-                        <input type="radio" name="user-marker" id="o-button" value="o"> O
+                <div class="options">
+                    <div class="user-selection">
+                        <label for="x-button">
+                            <input type="radio" name="user-marker" id="x-button" value="x" checked> X
+                        </label>
+                        <label for="o-button">
+                            <input type="radio" name="user-marker" id="o-button" value="o"> O
+                        </label>
+                    </div>
+                    <label for="hardMode" title="This is actually impossible to win.">
+                        <input type="checkbox" id="hardMode">
+                        <span class="checkbox"></span>
+                        <span>Hard mode</span>
                     </label>
                 </div>
-                <label for="hardMode" title="This is actually impossible to win.">
-                    <input type="checkbox" id="hardMode">
-                    <span class="checkbox"></span>
-                    <span>Hard mode</span>
-                </label>
             </menu>
             <div class="scoreboard">
                 <div>✖</div>
@@ -49,6 +51,9 @@
             <h2 id="turnLabel">X's Turn</h2>
             <div class="gameboard"></div>
         </main>
+        <footer>
+            Made by Gina Henderson
+        </footer>
     </div>
     <script src="script.js"></script>
 </body>

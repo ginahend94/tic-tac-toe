@@ -4,7 +4,7 @@
 
 :root {
     --dark-blue-rgb:34, 52, 59;
-    -blue:rgb(135,206,235);
+    --blue:rgb(56, 95, 110);
     --light-blue-rgb:135, 206, 235;
     --lighter-blue-rgb:195, 230, 245;
     --current-player:'✖';
@@ -16,19 +16,20 @@ html {
 }
 
 .wrapper {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     background-color: rgb(var(--light-blue-rgb));
     border: solid 1px;
-    grid-template-columns: max-content 1fr;
     height: 100vh;
 }
 
 header {
-    padding: 40px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
+    border: solid 1px;
 }
 
 menu {
@@ -37,6 +38,11 @@ menu {
     flex-direction: column;
     gap:10px;
     text-align: center;
+}
+
+.options {
+    display: flex;
+
 }
 
 .scoreboard {
@@ -115,8 +121,10 @@ main {
 
 .slot[data-marker = 'x']::before {
     content: '✖';
+    color: white;
 }
 
 .slot[data-marker = 'o']::before {
     content: '⭘';
+    color: var(--blue);
 }

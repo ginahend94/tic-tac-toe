@@ -45,9 +45,9 @@ const Options = (() => {
 
     // If user chose O, options are locked in until game restart
     const lockIn = () => {
-        userMarkerRadios.forEach(a => a.disabled = true);
-        playWithComputerCheckbox.disabled = true;
-        // document.querySelectorAll('input').forEach(a => a.disabled = true);
+        //userMarkerRadios.forEach(a => a.disabled = true);
+        //playWithComputerCheckbox.disabled = true;
+         document.querySelectorAll('input').forEach(a => a.disabled = true);
     }
 
     const isComputerTurn = () => {
