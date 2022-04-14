@@ -227,8 +227,21 @@ const Computer = (() => {
 
 //TO DO
 // Style page better
-// Maybe fix page layout?
-// Add rules (inc. x goes first)
 // Add animations
 // Line through winning play OR winning match lights up
 // Clear timeout for when you reset game before computer plays
+
+//MODAL
+const Modal = (() => {
+    const modalContainer = document.querySelector('.modal-container');
+    const modalBg = document.querySelector('.modal-bg');
+    const closeButton = document.querySelector('.close');
+    const about = document.getElementById('about');
+
+    const closeModal = () => modalContainer.classList.add('modal-closed');
+    const openModal = () => modalContainer.classList.remove('modal-closed');
+
+    modalBg.addEventListener('click', closeModal);
+    closeButton.addEventListener('click', closeModal);
+    about.addEventListener('click', openModal);
+})();

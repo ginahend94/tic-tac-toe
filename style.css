@@ -19,7 +19,6 @@ html {
     display: flex;
     flex-direction: column;
     background-color: rgb(var(--light-blue-rgb));
-    border: solid 1px;
     height: 100vh;
 }
 
@@ -31,9 +30,9 @@ header {
     justify-content: center;
 }
 
-h1, h2 {
+h1, h2, h3 {
     margin: 0;
-    padding: 10px;
+    padding: 10px 0;
     font-family: 'Permanent Marker';
 }
 
@@ -129,4 +128,56 @@ footer {
     display: flex;
     justify-content: space-between;
     padding: 20px;
+}
+
+a, a:active {
+    color: var(--blue);
+}
+
+i, a {
+    cursor: pointer;
+    transition: .2s;
+}
+i:hover, a:hover {
+    opacity: .5;
+}
+
+.modal-container {
+    display: flex;
+    position: fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height: 100vh;
+    justify-content: center;
+}
+.modal-bg {
+    background-color: rgba(0,0,0,.3);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+}
+.modal {
+    max-width:500px;
+    height: fit-content;
+    padding: 20px;
+    background-color: rgb(var(--lighter-blue-rgb));
+    box-shadow: 3px 3px 3px rgba(var(--dark-blue-rgb), .2);
+    margin-top: 50px;
+    position: relative;
+    z-index: 9999999;
+}
+.modal-closed {
+    display: none;
+}
+.close {
+    font-size:2rem;
+    position: absolute;
+    top:0;
+    right:0;
+    margin: 10px;
+}
+.socials {
+    display: flex;
+    justify-content: space-evenly;
 }
