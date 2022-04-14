@@ -89,21 +89,6 @@ const Gameboard = (() => {
     const getXPlaying = () => xPlaying;
     const setXPlaying = (boolean = true) => xPlaying = boolean;
 
-    const score = (() => {
-        x = 0;
-        o = 0;
-        resetScores = () => {
-            this.x = 0;
-            this.o = 0;
-        }
-        xWin = () => this.x += 1;
-        oWin = () => this.o += 1;
-        getX = () => this.x;
-        getO = () => this.o;
-        return { xWin, oWin, getX, getO, resetScores };
-    })();
-    const getScore = () => `x:${score.getX()} o:${score.getO()}`; // Test
-
     const markSlot = (slot, marker) => board[slot] = marker;
 
     const turnLabel = document.getElementById('turnLabel');
@@ -206,13 +191,12 @@ const Gameboard = (() => {
     const reset = () => {
         clearBoard();
         setXPlaying();
-        score.resetScores();
         setTurnLabel(`x's turn`);
         setHoverMarker('✖');
         showBoard();
     }
 
-    return { getBoard, showBoard, playRound, playTurn, getScore, getXPlaying, markSlot, switchTurn, reset };
+    return { getBoard, showBoard, playRound, playTurn, getXPlaying, markSlot, switchTurn, reset };
 })();
 
 Gameboard.showBoard();
@@ -243,7 +227,6 @@ const Computer = (() => {
 
 })();
 
-// winner is added to score board
 // new game button clears board array, unlocks marker buttons
 
 //TO DO
@@ -254,7 +237,5 @@ const Computer = (() => {
 // Line through winning play OR winning match lights up
 // markers
 // winner
-// Keep score
-// Add reset score button
 // create x wins and o wins variables in game board
 // X and O different colors (b&w)

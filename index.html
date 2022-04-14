@@ -9,7 +9,8 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">  
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/fc01c3b169.js" crossorigin="anonymous"></script> 
     <title>Tic Tac Toe</title>
 </head>
 <body>
@@ -32,27 +33,20 @@
                             <input type="radio" name="user-marker" id="o-button" value="o"> O
                         </label>
                     </div>
-                    <label for="hardMode" title="This is actually impossible to win.">
+                    <!-- <label for="hardMode" title="This is actually impossible to win.">
                         <input type="checkbox" id="hardMode">
                         <span class="checkbox"></span>
                         <span>Hard mode</span>
-                    </label>
+                    </label> -->
                 </div>
             </menu>
-            <div class="scoreboard">
-                <div>✖</div>
-                <div>⭘</div>
-                <div id="x-score">0</div>
-                <div id="o-score">0</div>
-                <button id="reset-scores">Reset scores</button>
-            </div>
         </header>
         <main>
             <h2 id="turnLabel">X's Turn</h2>
             <div class="gameboard"></div>
         </main>
         <footer>
-            Made by Gina Henderson
+            <span>Copyright &copy; 2022 <a href="https://github.com/ginahend94" target="_blank" rel="noreferrer">Gina Henderson</a>.</span> <i class="far fa-question-circle fa-lg"></i>
         </footer>
     </div>
     <script src="script.js"></script>
