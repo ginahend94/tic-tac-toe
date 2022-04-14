@@ -1,42 +1,137 @@
 // OBJECTS
+
+// OPTIONS
+const Options = (() => {
+    const playWithComputerCheckbox = document.getElementById('playWithComputer');
+    let playWithComputer = !!playWithComputerCheckbox.checked;
+    playWithComputerCheckbox.addEventListener('change', setPlayWithComputer)
+
+    function setPlayWithComputer(e) {
+        playWithComputer = e.target.checked;
+    }
+
+    const getPlayWithComputer = () => playWithComputer;
+
+    // X is chosen by default
+    let userMarker = 'x';
+    let computerMarker = 'o';
+    getUserMarker = () => userMarker;
+    getComputerMarker = () => computerMarker;
+    const userMarkerRadios = Array.from(document.querySelectorAll('input[name="user-marker"]'));
+
+    // User selects X or O
+    // when changed, assign checked to marker, then assign opposite to computer marker
+    const setMarker = () => {
+        userMarker = userMarkerRadios.find(a => a.checked).value;
+        // Computer is set to opposite marker
+        computerMarker = userMarker == 'o' ? 'x' : 'o';
+        if (userMarker == 'o' && getPlayWithComputer()) {
+            //Gameboard.switchTurn(); // Test?
+            lockIn();
+            setTimeout(() => {
+                Gameboard.playTurn(Computer.computerSlot(), getComputerMarker());
+            }, 500)
+        }
+    }
+
+    // Add event listener to both radio btns
+    userMarkerRadios.forEach(a => a.addEventListener('change', setMarker));
+
+    // If user chose O, options are locked in until game restart
+    const lockIn = () => {
+        userMarkerRadios.forEach(a => a.disabled = true);
+        playWithComputerCheckbox.disabled = true;
+        // document.querySelectorAll('input').forEach(a => a.disabled = true);
+    }
+
+    const isComputerTurn = () => {
+        if (Gameboard.getXPlaying()) {
+            return computerMarker == 'x';
+        }
+        return computerMarker == 'o';
+    }
+
+    return { getUserMarker, getComputerMarker, isComputerTurn, getPlayWithComputer };
+})();
+
 // Gameboard
 const Gameboard = (() => {
     // let board = [
     //     'x','x','o',
     //     'o','x','x',
     //     'x','o','o',
-    // ];
+    // ]; 
+    // Testing board
 
-    //let board = new Array(9);
     let board = Array(9).fill(null);
+    const getBoard = () => board;
 
     let xPlaying = true;
+    const getXPlaying = () => xPlaying;
+
+    const score = (() => {
+        x = 0;
+        o = 0;
+        xWin = () => this.x += 1;
+        oWin = () => this.o += 1;
+        getX = () => this.x;
+        getO = () => this.o;
+        return { xWin, oWin, getX, getO };
+    })();
+    const getScore = () => `x:${score.getX()} o:${score.getO()}`; // Test
+
+    const markSlot = (slot, marker) => board[slot] = marker;
+
+    const turnLabel = document.getElementById('turnLabel');
+    const checkForWin = marker => {
+        if (winState()) {
+            if (winState() != 'draw') {
+                turnLabel.textContent = `${marker} wins!`;
+            } else {
+                turnLabel.textContent = `It's a draw!`;
+            }
+        }
+        return winState();
+    }
 
     const playTurn = (slot, marker) => {
-        const turnLabel = document.getElementById('turnLabel');
+        markSlot(slot, marker);
         switchTurn();
-        turnLabel.textContent = `${xPlaying ? 'x' : 'o'}'s turn`;
-        board[slot] = marker;
-        if (winState() && winState() != 'draw') {
-            turnLabel.textContent = `${marker} wins!`
-        }
-        if (winState() == 'draw') {
-            turnLabel.textContent = `It's a draw!`;
-        }
+        if (!checkForWin(marker)) turnLabel.textContent = `${marker == 'x' ? 'o' : 'x'}'s turn`
         showBoard();
+        return;
+    }
+
+    const playRound = slot => {
+        const Marker = (() => {
+            check = () => xPlaying ? 'x' : 'o';
+            let marker = check();
+            return { marker, check };
+        })();
+
+        playTurn(slot, Marker.marker);
+
+        // Check if playing with computer and if it's computer's turn
+        if (Options.getPlayWithComputer() && Options.isComputerTurn()) {
+            // Make sure computer doesn't play after a win
+            if (checkForWin(Marker.marker)) return;
+            setTimeout(() => {
+                playTurn(Computer.computerSlot(), Options.getComputerMarker());
+            }, 1000);
+        }
     }
 
     const winState = () => {
         // Create array of winning indices
         const winners = [
-            [0,1,2],
-            [3,4,5],
-            [6,7,8],
-            [0,3,6],
-            [1,4,7],
-            [2,5,8],
-            [0,4,8],
-            [2,4,6]
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
         ]
 
         // go through board
@@ -52,7 +147,7 @@ const Gameboard = (() => {
     const switchTurn = () => {
         xPlaying = !xPlaying;
         // Change hover marker to current player's marker
-        document.documentElement.style.setProperty('--current-player', xPlaying?`'⨉'`:`'◯'`);
+        document.documentElement.style.setProperty('--current-player', xPlaying ? `'⨉'` : `'◯'`);
     }
 
     const showBoard = () => {
@@ -64,29 +159,62 @@ const Gameboard = (() => {
             slot.classList.add('slot');
             slot.dataset.id = i;
             slot.dataset.marker = board[i];
-            if (!board[i]) {
+            // Make board unclickable on filled slots, after a win, and during computer's turn
+            if (!board[i] && !winState() && !Options.isComputerTurn()) {
                 slot.addEventListener(
-                    'click', 
-                    playTurn.bind(slot, i, xPlaying ? 'x' : 'o')
+                    'click',
+                    playRound.bind(slot, i)
                 );
                 slot.style.cursor = 'pointer';
             }
         }
     }
 
-    return {showBoard, playTurn};
+    return { getBoard, showBoard, playRound, playTurn, getScore, getXPlaying, markSlot, switchTurn };
 })();
 
 Gameboard.showBoard();
 
-// User selects X or O
-// Computer is set to opposite of what player chooses
-// gameboard is displayed on screen
-// when player clicks a square, square index is logged in player moves
-// computer searches for empty slot and places marker
-// comp move is logged
-// each move is logged in gameboard
-// game searches gameboard for win
-// if win condition is met, game ends
-// Winner is displayed on screen
-// Option to play again is displayed on screen
+
+
+
+// Players can either play against person or computer
+// X goes first
+
+// COMPUTER -------
+const Computer = (() => {
+
+    // COMPUTER LOGIC
+    const computerSlot = () => {
+        const board = Gameboard.getBoard();
+        // create new array
+        const emptySlots = [];
+        // search board array for empty slots
+        for (let i = 0; i < board.length; i++) {
+            if (!board[i]) emptySlots.push(i);
+        }
+        // select random index from array
+        return emptySlots[(Math.floor(Math.random() * emptySlots.length))];
+    }
+
+    return { computerSlot };
+
+})();
+
+// winner is added to score board
+// new game button clears board array, unlocks marker buttons
+
+//TO DO
+// Enable playing against computer
+// program new game button
+// Style page better
+// Maybe fix page layout?
+// Add rules (inc. x goes first)
+// Add animations
+// Line through winning play OR winning match lights up
+// markers
+// winner
+// Keep score
+// Add reset score button
+// create x wins and o wins variables in game board
+// X and O different colors (b&w)
