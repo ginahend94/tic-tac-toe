@@ -158,7 +158,7 @@ const Gameboard = (() => {
     const switchTurn = () => {
         setXPlaying(!getXPlaying());
         // Change hover marker to current player's marker
-        setHoverMarker(`${getXPlaying() ? '✖' : '⭘'}`);
+        setHoverMarker(`${getXPlaying() ? 'X' : 'O'}`);
     }
 
     const showBoard = () => {
@@ -185,7 +185,7 @@ const Gameboard = (() => {
         clearBoard();
         setXPlaying();
         setTurnLabel(`x's turn`);
-        setHoverMarker('✖');
+        setHoverMarker('X');
         showBoard();
     }
 

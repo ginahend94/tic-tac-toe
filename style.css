@@ -7,7 +7,7 @@
     --blue:rgb(56, 95, 110);
     --light-blue-rgb:135, 206, 235;
     --lighter-blue-rgb:195, 230, 245;
-    --current-player:'✖';
+    --current-player:'X';
 }
 
 html {
@@ -30,7 +30,7 @@ header {
     justify-content: center;
 }
 
-h1, h2, h3 {
+h1, h3 {
     margin: 0;
     padding: 10px 0;
     font-family: 'Permanent Marker';
@@ -102,6 +102,8 @@ main {
     align-items: center;
     background-color: rgb(var(--light-blue-rgb));
     transition: .1s;
+    font-family: 'Permanent Marker';
+    font-size: 1.1em;
 }
 
 .slot[data-marker = 'null']::before {
@@ -115,12 +117,12 @@ main {
 }
 
 .slot[data-marker = 'x']::before {
-    content: '✖';
+    content: 'X';
     color: white;
 }
 
 .slot[data-marker = 'o']::before {
-    content: '⭘';
+    content: 'O';
     color: var(--blue);
 }
 
