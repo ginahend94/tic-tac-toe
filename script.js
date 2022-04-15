@@ -2,31 +2,37 @@
 
 // OPTIONS
 const Options = (() => {
-    const playWithComputerCheckbox = document.getElementById('playWithComputer');
-    let playWithComputer = !!playWithComputerCheckbox.checked;
-    playWithComputerCheckbox.addEventListener('change', setPlayWithComputer)
-
-    function setPlayWithComputer(e) {
-        playWithComputer = e.target.checked;
-    }
-
-    const getPlayWithComputer = () => playWithComputer;
-
+    
     // X is chosen by default
     let userMarker = 'x';
     let computerMarker = 'o';
-    getUserMarker = () => userMarker;
-    getComputerMarker = () => computerMarker;
+    const getUserMarker = () => userMarker;
+    const getComputerMarker = () => computerMarker;
+    const resetMarkers = () => {
+        userMarker = 'x';
+        computerMarker = 'o';
+        document.getElementById('x-button').checked = true;
+        document.getElementById('o-button').checked = false;
+    }
     const userMarkerRadios = Array.from(document.querySelectorAll('input[name="user-marker"]'));
+    
+    const playWithComputerCheckbox = document.getElementById('playWithComputer');
+    let playWithComputer = !!playWithComputerCheckbox.checked;
+    const setPlayWithComputer = e => {
+        playWithComputer = e.target.checked;
+        userMarkerRadios.forEach(a => a.disabled = !playWithComputer);
+    }
+    setPlayWithComputer({target:playWithComputerCheckbox});
+    playWithComputerCheckbox.addEventListener('change', setPlayWithComputer)
+    const getPlayWithComputer = () => playWithComputer;
 
     // User selects X or O
     // when changed, assign checked to marker, then assign opposite to computer marker
-    const setMarker = () => {
+    const setUserMarker = () => {
         userMarker = userMarkerRadios.find(a => a.checked).value;
         // Computer is set to opposite marker
         computerMarker = userMarker == 'o' ? 'x' : 'o';
         if (userMarker == 'o' && getPlayWithComputer()) {
-            //Gameboard.switchTurn(); // Test?
             lockIn();
             setTimeout(() => {
                 Gameboard.playTurn(Computer.computerSlot(), getComputerMarker());
@@ -35,61 +41,61 @@ const Options = (() => {
     }
 
     // Add event listener to both radio btns
-    userMarkerRadios.forEach(a => a.addEventListener('change', setMarker));
+    userMarkerRadios.forEach(a => a.addEventListener('change', setUserMarker));
 
     // If user chose O, options are locked in until game restart
     const lockIn = () => {
-        userMarkerRadios.forEach(a => a.disabled = true);
-        playWithComputerCheckbox.disabled = true;
-        // document.querySelectorAll('input').forEach(a => a.disabled = true);
+        //userMarkerRadios.forEach(a => a.disabled = true);
+        //playWithComputerCheckbox.disabled = true;
+         document.querySelectorAll('input').forEach(a => a.disabled = true);
     }
 
     const isComputerTurn = () => {
+        if (!getPlayWithComputer()) return false;
         if (Gameboard.getXPlaying()) {
             return computerMarker == 'x';
         }
         return computerMarker == 'o';
     }
 
+    const newGameButton = document.querySelector('.new-game');
+    const resetGame = () => {
+        document.querySelectorAll('input').forEach(a => a.disabled = false);
+        resetMarkers();
+        Gameboard.reset();
+        console.log('game reset');
+    }
+    newGameButton.addEventListener('click', resetGame);
+
+
     return { getUserMarker, getComputerMarker, isComputerTurn, getPlayWithComputer };
 })();
 
 // Gameboard
 const Gameboard = (() => {
-    // let board = [
-    //     'x','x','o',
-    //     'o','x','x',
-    //     'x','o','o',
-    // ]; 
-    // Testing board
 
     let board = Array(9).fill(null);
     const getBoard = () => board;
+    const clearBoard = () => board = Array(9).fill(null);
+
 
     let xPlaying = true;
     const getXPlaying = () => xPlaying;
-
-    const score = (() => {
-        x = 0;
-        o = 0;
-        xWin = () => this.x += 1;
-        oWin = () => this.o += 1;
-        getX = () => this.x;
-        getO = () => this.o;
-        return { xWin, oWin, getX, getO };
-    })();
-    const getScore = () => `x:${score.getX()} o:${score.getO()}`; // Test
+    const setXPlaying = (boolean = true) => xPlaying = boolean;
 
     const markSlot = (slot, marker) => board[slot] = marker;
 
     const turnLabel = document.getElementById('turnLabel');
+    const setTurnLabel = text => turnLabel.textContent = text;
+
     const checkForWin = marker => {
         if (winState()) {
             if (winState() != 'draw') {
-                turnLabel.textContent = `${marker} wins!`;
+                setTurnLabel(`${marker} wins!`);
             } else {
-                turnLabel.textContent = `It's a draw!`;
+                setTurnLabel(`It's a draw!`);
             }
+            setHoverMarker('');
         }
         return winState();
     }
@@ -97,7 +103,7 @@ const Gameboard = (() => {
     const playTurn = (slot, marker) => {
         markSlot(slot, marker);
         switchTurn();
-        if (!checkForWin(marker)) turnLabel.textContent = `${marker == 'x' ? 'o' : 'x'}'s turn`
+        if (!checkForWin(marker)) setTurnLabel(`${marker == 'x' ? 'o' : 'x'}'s turn`);
         showBoard();
         return;
     }
@@ -113,12 +119,17 @@ const Gameboard = (() => {
 
         // Check if playing with computer and if it's computer's turn
         if (Options.getPlayWithComputer() && Options.isComputerTurn()) {
+            setHoverMarker('');
             // Make sure computer doesn't play after a win
             if (checkForWin(Marker.marker)) return;
             setTimeout(() => {
                 playTurn(Computer.computerSlot(), Options.getComputerMarker());
             }, 1000);
         }
+    }
+
+    const setHoverMarker = marker => {
+        document.documentElement.style.setProperty('--current-player', `'${marker}'`);
     }
 
     const winState = () => {
@@ -145,9 +156,9 @@ const Gameboard = (() => {
     }
 
     const switchTurn = () => {
-        xPlaying = !xPlaying;
+        setXPlaying(!getXPlaying());
         // Change hover marker to current player's marker
-        document.documentElement.style.setProperty('--current-player', xPlaying ? `'⨉'` : `'◯'`);
+        setHoverMarker(`${getXPlaying() ? 'X' : 'O'}`);
     }
 
     const showBoard = () => {
@@ -170,18 +181,19 @@ const Gameboard = (() => {
         }
     }
 
-    return { getBoard, showBoard, playRound, playTurn, getScore, getXPlaying, markSlot, switchTurn };
+    const reset = () => {
+        clearBoard();
+        setXPlaying();
+        setTurnLabel(`x's turn`);
+        setHoverMarker('X');
+        showBoard();
+    }
+
+    return { getBoard, showBoard, playRound, playTurn, getXPlaying, markSlot, switchTurn, reset };
 })();
 
 Gameboard.showBoard();
 
-
-
-
-// Players can either play against person or computer
-// X goes first
-
-// COMPUTER -------
 const Computer = (() => {
 
     // COMPUTER LOGIC
@@ -201,20 +213,23 @@ const Computer = (() => {
 
 })();
 
-// winner is added to score board
-// new game button clears board array, unlocks marker buttons
-
 //TO DO
-// Enable playing against computer
-// program new game button
 // Style page better
-// Maybe fix page layout?
-// Add rules (inc. x goes first)
 // Add animations
 // Line through winning play OR winning match lights up
-// markers
-// winner
-// Keep score
-// Add reset score button
-// create x wins and o wins variables in game board
-// X and O different colors (b&w)
+// Clear timeout for when you reset game before computer plays
+
+//MODAL
+const Modal = (() => {
+    const modalContainer = document.querySelector('.modal-container');
+    const modalBg = document.querySelector('.modal-bg');
+    const closeButton = document.querySelector('.close');
+    const about = document.getElementById('about');
+
+    const closeModal = () => modalContainer.classList.add('modal-closed');
+    const openModal = () => modalContainer.classList.remove('modal-closed');
+
+    modalBg.addEventListener('click', closeModal);
+    closeButton.addEventListener('click', closeModal);
+    about.addEventListener('click', openModal);
+})();

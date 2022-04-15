@@ -1,54 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="normalize.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">  
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/fc01c3b169.js" crossorigin="anonymous"></script>
     <title>Tic Tac Toe</title>
 </head>
+
 <body>
     <div class="wrapper">
         <header>
             <h1>Tic Tac Toe</h1>
             <menu>
-                <button class="new-game">New game</button>
                 <label for="playWithComputer">
                     <input type="checkbox" id="playWithComputer">
                     <span class="checkbox"></span>
                     <span>Play against Computer</span>
                 </label>
-                <div class="user-selection">
-                    <label for="x-button">
-                        <input type="radio" name="user-marker" id="x-button" value="x" checked> X
-                    </label>
-                    <label for="o-button">
-                        <input type="radio" name="user-marker" id="o-button" value="o"> O
-                    </label>
+                <div class="options">
+                    <div class="user-selection">
+                        <label for="x-button">
+                            <input type="radio" name="user-marker" id="x-button" value="x" checked> X
+                        </label>
+                        <label for="o-button">
+                            <input type="radio" name="user-marker" id="o-button" value="o"> O
+                        </label>
+                    </div>
+                    <!-- <label for="hardMode" title="This is actually impossible to win.">
+                        <input type="checkbox" id="hardMode">
+                        <span class="checkbox"></span>
+                        <span>Hard mode</span>
+                    </label> -->
                 </div>
-                <label for="playerIsO">
-                    <span class="marker">Marker</span>
-                    <input type="checkbox" id="playerIsO">
-                    <span class="xOrO"></span>
-                    <span class="xo"><span class="x">X</span><span class="o">O</span></span>
-                </label>
-                <label for="hardMode" title="This is actually impossible to win.">
-                    <input type="checkbox" id="hardMode">
-                    <span class="checkbox"></span>
-                    <span>Hard mode</span>
-                </label>
+                <button class="new-game">New game</button>
             </menu>
         </header>
         <main>
             <h2 id="turnLabel">X's Turn</h2>
             <div class="gameboard"></div>
         </main>
+        <footer>
+            <span>Copyright &copy; 2022 <a href="https://github.com/ginahend94" target="_blank" rel="noreferrer">Gina
+                    Henderson</a>.</span> <i id="about" class="far fa-question-circle fa-lg"></i>
+        </footer>
+    </div>
+    <div class="modal-container modal-closed">
+        <div class="modal-bg"></div>
+        <div class="modal">
+            <i class="close fas fa-times"></i>
+            <h3>What is this?</h3>
+            <p>
+                It's a simple Tic-Tac-Toe game! X goes first. You can play alone or with a friend!
+            </p>
+            <p>
+                This is a project for
+                <a href="https://www.theodinproject.com/paths/foundations/courses/foundations/lessons/calculator"
+                    target="_blank" rel="noreferrer">The Odin Project</a>,
+                a free online course to learn web development.
+                This game was created by me, Gina Henderson. Find me below. Thanks for checking out my project!
+            </p>
+            <div class="socials">
+                <a href="https://github.com/ginahend94" title="GitHub" target="_blank" rel="noreferrer"><i
+                        class="fab fa-github fa-2x"></i></a>
+                <a href="https://twitter.com/ginahend94" title="Twitter" target="_blank" rel="noreferrer"><i
+                        class="fab fa-twitter fa-2x"></i></a>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>
