@@ -229,9 +229,6 @@ const Computer = (() => {
 
 })();
 
-//TO DO
-// Clear timeout for when you reset game before computer plays
-
 //MODAL
 const Modal = (() => {
     const modalContainer = document.querySelector('.modal-container');
