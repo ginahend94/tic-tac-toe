@@ -107,6 +107,8 @@ const Gameboard = (() => {
         return;
     }
 
+    let computerTurn;
+
     const playRound = slot => {
         let marker = xPlaying ? 'x' : 'o';
 
@@ -117,7 +119,7 @@ const Gameboard = (() => {
             setHoverMarker('');
             // Make sure computer doesn't play after a win
             if (checkForWin(marker)) return;
-            setTimeout(() => {
+            computerTurn = setTimeout(() => {
                 playTurn(Computer.computerSlot(), Options.getComputerMarker());
             }, 1000);
         }
@@ -167,7 +169,6 @@ const Gameboard = (() => {
         setXPlaying(!getXPlaying());
         // Change hover marker to current player's marker
         setHoverMarker(`${getXPlaying() ? 'X' : 'O'}`);
-        console.log(`hovermarker set`)
     }
 
     const showBoard = () => {
@@ -195,6 +196,7 @@ const Gameboard = (() => {
     }
 
     const reset = () => {
+        clearTimeout(computerTurn);
         clearBoard();
         setXPlaying();
         winState.resetWinningSpots();
