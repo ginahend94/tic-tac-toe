@@ -92,7 +92,6 @@ const Gameboard = (() => {
         if (winState.check()) {
             if (winState.check() != 'draw') {
                 setTurnLabel(`${marker} wins!`);
-                showWinAnimation();
             } else {
                 setTurnLabel(`It's a draw!`);
             }
@@ -131,6 +130,7 @@ const Gameboard = (() => {
 
     const setHoverMarker = marker => {
         document.documentElement.style.setProperty('--current-player', `'${marker}'`);
+        document.documentElement.style.setProperty('--current-player-color', `'${marker == 'X' ? 'white' : 'var(--blue)'}'`);
     }
 
     const winState = (() => {
@@ -171,7 +171,7 @@ const Gameboard = (() => {
     const switchTurn = () => {
         setXPlaying(!getXPlaying());
         // Change hover marker to current player's marker
-        setHoverMarker(`${getXPlaying() ? '✖' : '⭘'}`);
+        setHoverMarker(`${getXPlaying() ? 'X' : 'O'}`);
     }
 
     const showBoard = () => {
@@ -181,6 +181,14 @@ const Gameboard = (() => {
             const slot = document.createElement('div');
             main.appendChild(slot);
             slot.classList.add('slot');
+            // show win animation
+            console.log(i)
+            console.log(winState.winningSpots.indexOf(i) >= 0);
+            if (winState.check() && winState.winningSpots.indexOf(i) >= 0) {
+                console.log(i)
+                console.log(`slot ${i} is a winning spot`)
+                slot.classList.add('winner');
+            }
             slot.dataset.id = i;
             slot.dataset.marker = board[i];
             // Make board unclickable on filled slots, after a win, and during computer's turn
@@ -192,11 +200,6 @@ const Gameboard = (() => {
                 slot.style.cursor = 'pointer';
             }
         }
-    }
-
-    const showWinAnimation = () => {
-        console.log(winState.winningSpots);
-        winState.winningSpots.forEach(a => document.querySelector(`[data-id="${a}"]`).style.backgroundColor = 'black');
     }
 
     const reset = () => {

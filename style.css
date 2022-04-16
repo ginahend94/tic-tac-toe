@@ -8,6 +8,7 @@
     --light-blue-rgb:135, 206, 235;
     --lighter-blue-rgb:195, 230, 245;
     --current-player:'X';
+    --current-player-color:white;
 }
 
 html {
@@ -108,11 +109,13 @@ main {
 
 .slot[data-marker = 'null']::before {
     content: var(--current-player);
+    color: var(--current-player-color);
     opacity: 0;
     transition: .15s;
 }
 .slot[data-marker = 'null']:hover::before {
     content: var(--current-player);
+    color: var(--current-player-color);
     opacity: .3;
 }
 
@@ -127,6 +130,15 @@ main {
 }
 
 /* Win animation */
+.winner {
+    background-color: red;
+}
+
+@keyframes winAnimation {
+    0% {
+        translate: ();
+    }
+}
 
 
 
