@@ -149,7 +149,7 @@ const Gameboard = (() => {
         // Create array for spots that won
         let winningSpots = [];
         const setWinningSpots = winner => winner.forEach(a => winningSpots.push(a));
-        const resetWinningSpots = () => winningSpots = [];
+        const resetWinningSpots = () => winningSpots.length = 0;
 
         // go through board
         // for each index, if all have same marker, return true
@@ -182,11 +182,7 @@ const Gameboard = (() => {
             main.appendChild(slot);
             slot.classList.add('slot');
             // show win animation
-            console.log(i)
-            console.log(winState.winningSpots.indexOf(i) >= 0);
             if (winState.check() && winState.winningSpots.indexOf(i) >= 0) {
-                console.log(i)
-                console.log(`slot ${i} is a winning spot`)
                 slot.classList.add('winner');
             }
             slot.dataset.id = i;
@@ -199,15 +195,18 @@ const Gameboard = (() => {
                 );
                 slot.style.cursor = 'pointer';
             }
+            console.log(slot)
         }
+        console.log('------------------------------')
     }
 
     const reset = () => {
         clearBoard();
         setXPlaying();
         winState.resetWinningSpots();
+        console.log(winState.winningSpots);
         setTurnLabel(`x's turn`);
-        setHoverMarker('✖');
+        setHoverMarker('X');
         showBoard();
     }
 
