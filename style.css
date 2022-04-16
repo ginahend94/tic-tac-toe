@@ -126,6 +126,10 @@ main {
     color: var(--blue);
 }
 
+/* Win animation */
+
+
+
 footer {
     display: flex;
     justify-content: space-between;

@@ -2,7 +2,7 @@
 
 // OPTIONS
 const Options = (() => {
-    
+
     // X is chosen by default
     let userMarker = 'x';
     let computerMarker = 'o';
@@ -15,14 +15,14 @@ const Options = (() => {
         document.getElementById('o-button').checked = false;
     }
     const userMarkerRadios = Array.from(document.querySelectorAll('input[name="user-marker"]'));
-    
+
     const playWithComputerCheckbox = document.getElementById('playWithComputer');
     let playWithComputer = !!playWithComputerCheckbox.checked;
     const setPlayWithComputer = e => {
         playWithComputer = e.target.checked;
         userMarkerRadios.forEach(a => a.disabled = !playWithComputer);
     }
-    setPlayWithComputer({target:playWithComputerCheckbox});
+    setPlayWithComputer({ target: playWithComputerCheckbox });
     playWithComputerCheckbox.addEventListener('change', setPlayWithComputer)
     const getPlayWithComputer = () => playWithComputer;
 
@@ -47,7 +47,7 @@ const Options = (() => {
     const lockIn = () => {
         //userMarkerRadios.forEach(a => a.disabled = true);
         //playWithComputerCheckbox.disabled = true;
-         document.querySelectorAll('input').forEach(a => a.disabled = true);
+        document.querySelectorAll('input').forEach(a => a.disabled = true);
     }
 
     const isComputerTurn = () => {
@@ -89,15 +89,16 @@ const Gameboard = (() => {
     const setTurnLabel = text => turnLabel.textContent = text;
 
     const checkForWin = marker => {
-        if (winState()) {
-            if (winState() != 'draw') {
+        if (winState.check()) {
+            if (winState.check() != 'draw') {
                 setTurnLabel(`${marker} wins!`);
+                showWinAnimation();
             } else {
                 setTurnLabel(`It's a draw!`);
             }
             setHoverMarker('');
         }
-        return winState();
+        return winState.check();
     }
 
     const playTurn = (slot, marker) => {
@@ -132,7 +133,7 @@ const Gameboard = (() => {
         document.documentElement.style.setProperty('--current-player', `'${marker}'`);
     }
 
-    const winState = () => {
+    const winState = (() => {
         // Create array of winning indices
         const winners = [
             [0, 1, 2],
@@ -145,20 +146,32 @@ const Gameboard = (() => {
             [2, 4, 6]
         ]
 
+        // Create array for spots that won
+        let winningSpots = [];
+        const setWinningSpots = winner => winner.forEach(a => winningSpots.push(a));
+        const resetWinningSpots = () => winningSpots = [];
+
         // go through board
         // for each index, if all have same marker, return true
-        let isWin = winners.some(winner => {
-            if (!board[winner[0]] || !board[winner[1]] || !board[winner[2]]) return false;
-            return board[winner[0]] == board[winner[1]] && board[winner[1]] == board[winner[2]]
-        })
-        if (isWin) return isWin;
-        if (board.every(a => a)) return 'draw';
-    }
+        const check = () => {
+            let isWin = winners.some(winner => {
+                if (!board[winner[0]] || !board[winner[1]] || !board[winner[2]]) return false;
+                if (board[winner[0]] == board[winner[1]] && board[winner[1]] == board[winner[2]]) {
+                    setWinningSpots(winner);
+                    return true;
+                }
+                return false;
+            })
+            if (isWin) return isWin;
+            if (board.every(a => a)) return 'draw';
+        }
+        return { check, winningSpots, resetWinningSpots }
+    })();
 
     const switchTurn = () => {
         setXPlaying(!getXPlaying());
         // Change hover marker to current player's marker
-        setHoverMarker(`${getXPlaying() ? 'X' : 'O'}`);
+        setHoverMarker(`${getXPlaying() ? '✖' : '⭘'}`);
     }
 
     const showBoard = () => {
@@ -171,7 +184,7 @@ const Gameboard = (() => {
             slot.dataset.id = i;
             slot.dataset.marker = board[i];
             // Make board unclickable on filled slots, after a win, and during computer's turn
-            if (!board[i] && !winState() && !Options.isComputerTurn()) {
+            if (!board[i] && !winState.check() && !Options.isComputerTurn()) {
                 slot.addEventListener(
                     'click',
                     playRound.bind(slot, i)
@@ -181,11 +194,17 @@ const Gameboard = (() => {
         }
     }
 
+    const showWinAnimation = () => {
+        console.log(winState.winningSpots);
+        winState.winningSpots.forEach(a => document.querySelector(`[data-id="${a}"]`).style.backgroundColor = 'black');
+    }
+
     const reset = () => {
         clearBoard();
         setXPlaying();
+        winState.resetWinningSpots();
         setTurnLabel(`x's turn`);
-        setHoverMarker('X');
+        setHoverMarker('✖');
         showBoard();
     }
 
@@ -214,10 +233,10 @@ const Computer = (() => {
 })();
 
 //TO DO
-// Style page better
 // Add animations
 // Line through winning play OR winning match lights up
 // Clear timeout for when you reset game before computer plays
+// Remove 'check' marker thing
 
 //MODAL
 const Modal = (() => {
