@@ -195,9 +195,7 @@ const Gameboard = (() => {
                 );
                 slot.style.cursor = 'pointer';
             }
-            console.log(slot)
         }
-        console.log('------------------------------')
     }
 
     const reset = () => {

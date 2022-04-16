@@ -90,9 +90,7 @@ main {
     text-align: center;
     justify-content: center;
     align-items: center;
-    gap: 10px;
     font-size: 2rem;
-    background-color: rgb(var(--lighter-blue-rgb));
     font-weight: bold;
 }
 
@@ -102,10 +100,26 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(var(--light-blue-rgb));
     transition: .1s;
     font-family: 'Permanent Marker';
     font-size: 1.1em;
+}
+
+.slot:nth-child(3n + 0) {
+    border-left: solid 5px rgb(var(--lighter-blue-rgb));
+}
+.slot:nth-child(3n + 1) {
+    border-right: solid 5px rgb(var(--lighter-blue-rgb));
+}
+.slot:nth-child(3n + 2) {
+    border-left: solid 5px rgb(var(--lighter-blue-rgb));
+    border-right: solid 5px rgb(var(--lighter-blue-rgb));
+}
+.slot:nth-child(-n + 6) {
+    border-bottom: solid 5px rgb(var(--lighter-blue-rgb));
+}
+.slot:nth-child(n + 4) {
+    border-top: solid 5px rgb(var(--lighter-blue-rgb));
 }
 
 .slot[data-marker='null']::before {
@@ -155,7 +169,7 @@ main {
     }
 }
 
-.winner {
+.winner::before {
     animation: wiggle 1s infinite;
 }
 
