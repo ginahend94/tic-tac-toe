@@ -63,7 +63,6 @@ const Options = (() => {
         document.querySelectorAll('input').forEach(a => a.disabled = false);
         resetMarkers();
         Gameboard.reset();
-        console.log('game reset');
     }
     newGameButton.addEventListener('click', resetGame);
 
@@ -130,7 +129,7 @@ const Gameboard = (() => {
 
     const setHoverMarker = marker => {
         document.documentElement.style.setProperty('--current-player', `'${marker}'`);
-        document.documentElement.style.setProperty('--current-player-color', `'${marker == 'X' ? 'white' : 'var(--blue)'}'`);
+        document.documentElement.style.setProperty('--current-player-color', `${marker == 'X' ? 'white' : 'var(--blue)'}`);
     }
 
     const winState = (() => {
@@ -172,6 +171,7 @@ const Gameboard = (() => {
         setXPlaying(!getXPlaying());
         // Change hover marker to current player's marker
         setHoverMarker(`${getXPlaying() ? 'X' : 'O'}`);
+        console.log(`hovermarker set`)
     }
 
     const showBoard = () => {
@@ -202,7 +202,6 @@ const Gameboard = (() => {
         clearBoard();
         setXPlaying();
         winState.resetWinningSpots();
-        console.log(winState.winningSpots);
         setTurnLabel(`x's turn`);
         setHoverMarker('X');
         showBoard();
