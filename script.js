@@ -63,7 +63,6 @@ const Options = (() => {
         document.querySelectorAll('input').forEach(a => a.disabled = false);
         resetMarkers();
         Gameboard.reset();
-        console.log('game reset');
     }
     newGameButton.addEventListener('click', resetGame);
 
@@ -92,7 +91,6 @@ const Gameboard = (() => {
         if (winState.check()) {
             if (winState.check() != 'draw') {
                 setTurnLabel(`${marker} wins!`);
-                showWinAnimation();
             } else {
                 setTurnLabel(`It's a draw!`);
             }
@@ -109,21 +107,19 @@ const Gameboard = (() => {
         return;
     }
 
-    const playRound = slot => {
-        const Marker = (() => {
-            check = () => xPlaying ? 'x' : 'o';
-            let marker = check();
-            return { marker, check };
-        })();
+    let computerTurn;
 
-        playTurn(slot, Marker.marker);
+    const playRound = slot => {
+        let marker = xPlaying ? 'x' : 'o';
+
+        playTurn(slot, marker)
 
         // Check if playing with computer and if it's computer's turn
         if (Options.getPlayWithComputer() && Options.isComputerTurn()) {
             setHoverMarker('');
             // Make sure computer doesn't play after a win
-            if (checkForWin(Marker.marker)) return;
-            setTimeout(() => {
+            if (checkForWin(marker)) return;
+            computerTurn = setTimeout(() => {
                 playTurn(Computer.computerSlot(), Options.getComputerMarker());
             }, 1000);
         }
@@ -131,6 +127,7 @@ const Gameboard = (() => {
 
     const setHoverMarker = marker => {
         document.documentElement.style.setProperty('--current-player', `'${marker}'`);
+        document.documentElement.style.setProperty('--current-player-color', `${marker == 'X' ? 'white' : 'var(--blue)'}`);
     }
 
     const winState = (() => {
@@ -149,7 +146,7 @@ const Gameboard = (() => {
         // Create array for spots that won
         let winningSpots = [];
         const setWinningSpots = winner => winner.forEach(a => winningSpots.push(a));
-        const resetWinningSpots = () => winningSpots = [];
+        const resetWinningSpots = () => winningSpots.length = 0;
 
         // go through board
         // for each index, if all have same marker, return true
@@ -171,7 +168,7 @@ const Gameboard = (() => {
     const switchTurn = () => {
         setXPlaying(!getXPlaying());
         // Change hover marker to current player's marker
-        setHoverMarker(`${getXPlaying() ? '✖' : '⭘'}`);
+        setHoverMarker(`${getXPlaying() ? 'X' : 'O'}`);
     }
 
     const showBoard = () => {
@@ -181,6 +178,10 @@ const Gameboard = (() => {
             const slot = document.createElement('div');
             main.appendChild(slot);
             slot.classList.add('slot');
+            // show win animation
+            if (winState.check() && winState.winningSpots.indexOf(i) >= 0) {
+                slot.classList.add('winner');
+            }
             slot.dataset.id = i;
             slot.dataset.marker = board[i];
             // Make board unclickable on filled slots, after a win, and during computer's turn
@@ -194,17 +195,13 @@ const Gameboard = (() => {
         }
     }
 
-    const showWinAnimation = () => {
-        console.log(winState.winningSpots);
-        winState.winningSpots.forEach(a => document.querySelector(`[data-id="${a}"]`).style.backgroundColor = 'black');
-    }
-
     const reset = () => {
+        clearTimeout(computerTurn);
         clearBoard();
         setXPlaying();
         winState.resetWinningSpots();
         setTurnLabel(`x's turn`);
-        setHoverMarker('✖');
+        setHoverMarker('X');
         showBoard();
     }
 
@@ -233,10 +230,7 @@ const Computer = (() => {
 })();
 
 //TO DO
-// Add animations
-// Line through winning play OR winning match lights up
 // Clear timeout for when you reset game before computer plays
-// Remove 'check' marker thing
 
 //MODAL
 const Modal = (() => {
