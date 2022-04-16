@@ -108,19 +108,15 @@ const Gameboard = (() => {
     }
 
     const playRound = slot => {
-        const Marker = (() => {
-            check = () => xPlaying ? 'x' : 'o';
-            let marker = check();
-            return { marker, check };
-        })();
+        let marker = xPlaying ? 'x' : 'o';
 
-        playTurn(slot, Marker.marker);
+        playTurn(slot, marker)
 
         // Check if playing with computer and if it's computer's turn
         if (Options.getPlayWithComputer() && Options.isComputerTurn()) {
             setHoverMarker('');
             // Make sure computer doesn't play after a win
-            if (checkForWin(Marker.marker)) return;
+            if (checkForWin(marker)) return;
             setTimeout(() => {
                 playTurn(Computer.computerSlot(), Options.getComputerMarker());
             }, 1000);
@@ -232,10 +228,7 @@ const Computer = (() => {
 })();
 
 //TO DO
-// Add animations
-// Line through winning play OR winning match lights up
 // Clear timeout for when you reset game before computer plays
-// Remove 'check' marker thing
 
 //MODAL
 const Modal = (() => {
